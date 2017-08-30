@@ -8,16 +8,14 @@ $response = array("error" => FALSE);
 
 $email = $_POST['email'];
 
-if ($db->isUserExisted($email)) {
-
+if ($db->ifUserExists($email)) {
+	//five digit verification code to be sent to user's email
         $random = rand(10000 , 99999);
         $random = (string)$random;
       
         $response["error"] = FALSE;
         $response["code_server"] = $random;
-        
-       // print_r($response);
-        
+       
         $mail = new PHPMailer;
 
 	$mail->SMTPDebug = 0;                                 // Enable verbose debug output
@@ -54,6 +52,7 @@ if ($db->isUserExisted($email)) {
     }else{
         
         $response["error"] = TRUE;
+	//If posted email doesn't match any existing email in database, generate error 
         $response["error_msg"] = "This email address is not registered with any account!";
         echo json_encode($response);
     }
